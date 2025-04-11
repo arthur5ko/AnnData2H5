@@ -1,7 +1,7 @@
 # AnnData2H5
 This is a python helper function that writes an AnnData object into an HDF5 file in 10X Genomics style.
 
-A 10X Genomics Gene Expression HDF5 file contains a "matrix" group with the following data as of CellRanger 9.0:\
+A 10X Genomics Gene Expression HDF5 file contains a "matrix" group with the following data as of CellRanger 8.0:\
 --barcodes\
 --data\
 --indices\
@@ -15,6 +15,8 @@ A 10X Genomics Gene Expression HDF5 file contains a "matrix" group with the foll
 --id\
 --name\
 --feature_type
+
+Additional details here: https://www.10xgenomics.com/support/software/cell-ranger/8.0/analysis/outputs/cr-outputs-h5-matrices
 
 This function writes an AnnData object (adata) into an HDF5 file following the 10X Genomics' format.\
 adata.var will be written to the h5 file, whereas, adata.obs will not be saved.\
