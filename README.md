@@ -33,7 +33,7 @@ Args:\
         compression_opts (optional, int): Compression level (e.g., for gzip 0-9). Defaults to 4.
 
 Returns:\
-        None. adata will be write to 'output' in 10X Genomics style HDF5 file.
+        None. adata will be written to 'output' in 10X Genomics style HDF5 file.
         
 A quick example:
 
