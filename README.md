@@ -31,7 +31,7 @@ Args:\
         feature_id_col (optional,str): Column in adata.var to be used as "id" data in the h5 file. Default to "gene_ids" if not provided.\
         feature_type_col (optional,str): Column in adata.var to be used as "feature_type" data in the h5 file. The default is "feature_types". \
         name_col (optional,str): Column in adata.var that will be used as "name" data in the h5 file. None is the default value and adata.var.index will be used. Both Scanpy and Seurat use "name" as index by default when reading 10X h5.\
-        genom_col (optional,str): Column in adata.var that will be used as "gnome" adata. "genome" is the defaulty value.\
+        genome_col (optional,str): Column in adata.var that will be used as "gnome" adata. "genome" is the defaulty value.\
         compression (optional,str): Compression type for HDF5 datasets.\
         compression_opts (optional, int): Compression level (e.g., for gzip 0-9). Defaults to 4.
 
