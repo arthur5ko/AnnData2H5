@@ -22,7 +22,8 @@ Additional details here: https://www.10xgenomics.com/support/software/cell-range
 This function writes an AnnData object (adata) into an HDF5 file following the 10X Genomics' format.\
 adata.var will be written to the h5 file, whereas, adata.obs will not be saved.\
 10X format does not specify how adata.obs should be stored in an HDF5 file.\
-**This function was last tested on anndata 0.10.9 and Seurat 5.2.**
+**This function was last tested on anndata 0.10.9 and Seurat 5.2.**\
+Must adata objects read from scanpy.read_10x_h5 should have all necessary information in the .var dataframe.
 
 Args:\
         adata (anndData) : an AnnData object.\
