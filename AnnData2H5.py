@@ -49,39 +49,42 @@ def writeAdata_10Xh5(adata: ad.AnnData ,output:str, feature_id_col: Optional[str
 	
 	feature_tags={}
 	use_feature_tag_keys=[]
-	
-	try:
-		feature_tags["id"]=adata.var[feature_id_col].astype(str).to_numpy().astype(bytes)
-		use_feature_tag_keys.append("id")
-	except KeyError:
-		print("Error: the \"%s\" column does not exist in adata.var."%(feature_id_col))
-		return None
-	try:
-		feature_tags["feature_type"]=adata.var[feature_type_col].astype(str).to_numpy().astype(bytes)
-		use_feature_tag_keys.append("feature_type")
-	except KeyError:
-		print("Error: the \"%s\" column does not exist in adata.var."%(feature_type_col))
-		return None
-	try:
-		feature_tags["genome"]=adata.var[genome_col].astype(str).to_numpy().astype(bytes)
-		use_feature_tag_keys.append("genome")
-	except KeyError:
-		print("Error: the \"%s\" column does not exist in adata.var."%(genome_col))
-		return None
 
-	if name_col is None: ## use adat.var.index for the "name" dataset if not defined
-		feature_tags["name"]=adata.var.index.astype(str).to_numpy().astype(bytes)
+	# Handle mandatory columns first and check for their existence
+	mandatory_cols = {
+		"id": feature_id_col,
+		"feature_type": feature_type_col,
+		"genome": genome_col
+	}
+
+	for tag_key, col_name in mandatory_cols.items():
+		if col_name not in adata.var.columns:
+			print(f"Error: The '{col_name}' column (for '{tag_key}') does not exist in adata.var.")
+			return None
+		feature_tags[tag_key] = adata.var[col_name].astype(str).to_numpy().astype(bytes)
+		use_feature_tag_keys.append(tag_key)
+
+	# Handle name_col (special case for index)
+	if name_col is None:
+		feature_tags["name"] = adata.var.index.astype(str).to_numpy().astype(bytes)
+	elif name_col not in adata.var.columns: # Check if name_col exists if it's not None
+		print(f"Error: The '{name_col}' column (for 'name') does not exist in adata.var.")
+		return None
 	else:
-		feature_tags["name"]=adata.var[name_col].astype(str).to_numpy().astype(bytes)
+		feature_tags["name"] = adata.var[name_col].astype(str).to_numpy().astype(bytes)
 	use_feature_tag_keys.append("name")
-	
-	### add the rest of adata.var to h5
-	for i in adata.var.columns:
-		if(i not in [feature_id_col, feature_type_col, name_col,genome_col]): ## skip data already added
-			feature_tags[i]=adata.var[i].astype(str).to_numpy().astype(bytes)
-			use_feature_tag_keys.append(i)
-		else:
+
+	# Process remaining columns
+	# Convert all other relevant columns to string type first
+	other_cols_df = adata.var.astype(str)
+
+	for col_name in other_cols_df.columns:
+		# Skip columns already processed
+		if col_name in [feature_id_col, feature_type_col, genome_col, name_col]:
 			continue
+		
+		feature_tags[col_name] = other_cols_df[col_name].to_numpy().astype(bytes)
+		use_feature_tag_keys.append(col_name)
 	
 	with h5py.File(output,'w') as f:
 	
